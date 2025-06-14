@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Web Project</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #error-message {
+            color: red;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Responsive Layout */
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* To-Do List & Gallery */
+        .todo-container, .gallery-container {
+            background: white;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            padding: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .gallery img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <span>My Project</span>
+        <span>Menu</span>
+    </nav>
+
+    <div class="layout">
+
+        <!-- Contact Form -->
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form id="contactForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button type="submit">Submit</button>
+                <p id="error-message"></p>
+            </form>
+        </div>
+
+        <!-- To-Do List -->
+        <div class="todo-container">
+            <h2>To-Do List</h2>
+            <input type="text" id="taskInput" placeholder="Enter a task">
+            <button onclick="addTask()">Add Task</button>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
+
+    <!-- Image Gallery -->
+    <div class="gallery-container">
+        <h2>Image Gallery</h2>
+        <input type="text" id="imageURL" placeholder="Enter image URL">
+        <button onclick="addImage()">Add Image</button>
+        <div id="gallery" class="gallery"></div>
+    </div>
+
+    <script>
+        // Form Validation
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let message = document.getElementById("message").value.trim();
+            let errorMessage = document.getElementById("error-message");
+
+            if (name === "" || email === "" || message === "") {
+                errorMessage.textContent = "All fields are required!";
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                errorMessage.textContent = "Enter a valid email address!";
+                return;
+            }
+
+            errorMessage.textContent = "";
+            alert("Form submitted successfully!");
+        });
+
+        function validateEmail(email) {
+            let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            return pattern.test(email);
+        }
+
+        // To-Do List Functionality
+        function addTask() {
+            let taskInput = document.getElementById("taskInput").value;
+            if (taskInput.trim() === "") return;
+
+            let li = document.createElement("li");
+            li.textContent = taskInput;
+            
+            let removeBtn = document.createElement("button");
+            removeBtn.textContent = "❌";
+            removeBtn.onclick = function() {
+                li.remove();
+            };
+
+            li.appendChild(removeBtn);
+            document.getElementById("taskList").appendChild(li);
+            document.getElementById("taskInput").value = ""; // Clear input
+        }
+
+        // Image Gallery Functionality
+        function addImage() {
+            let imageUrl = document.getElementById("imageURL").value;
+            if (imageUrl.trim() === "") return;
+
+            let img = document.createElement("img");
+            img.src = imageUrl;
+            img.alt = "Gallery Image";
+
+            document.getElementById("gallery").appendChild(img);
+            document.getElementById("imageURL").value = ""; // Clear input
+        }
+    </script>
+
+</body>
+</html>
